@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Fitts' Law Sandbox</title>
+	<link href="normalize.css" rel="stylesheet">
+	<style>
+		#page {
+			padding:10px;
+		}
+		#sandbox {
+			margin:20px;
+			border:1px solid #ccc;
+			width:800px;
+			height:600px;
+			position:relative;
+		}
+		#target {
+			position:absolute;
+			top:20px;
+			right:20px;
+		}
+		
+		#slider-container {
+			position:absolute;
+			bottom:20px;
+			right:20px;
+		}
+		
+		#slider-rail {
+			margin-top:10px;
+			width:200px;
+			border:1px solid #111;
+			background-color:#333;
+			height:10px;
+		}
+		
+		#slider {
+			width:10px;
+			height:30px;
+			margin-top:-10px;
+			border:1px solid #000;
+			background-color:#eee;
+			cursor:pointer;
+		}
+	</style>
+</head>
+	<body>
+		<div id="page">
+			<h1>Fitts' Law Sandbox</h1>
+			<p>
+				The formula is <code>Movement Time = a + b(log<sub>2</sub>(widthOfTarget/distanceToTarget) + 1)</code>.
+			</p>
+			<div id="sandbox">
+				<button type="button" id="target">Target</button>
+			
+				<div id="slider-container">
+					Adjust the size of the target: 
+					<div id="slider-rail">
+						<div id="slider"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			function calculateMovementTime(){
+				//has to depend on current position of mouse--it's either width, height, or diagonal
+				var userTargetWidth = userTarget.clientWidth;
+			}
+		
+			var sandbox = document.getElementById('sandbox');
+			sandbox.addEventListener('mousemove', calculateMovementTime, true);
+			
+			var userTarget = document.getElementById('target');
+		</script>
+	</body>
+</htmL>
