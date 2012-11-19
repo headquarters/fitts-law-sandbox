@@ -6,8 +6,19 @@
 	<link href="normalize.css" rel="stylesheet">
 	<style>
 		#page {
-			padding:10px;
+			padding:0 10px;
 		}
+		
+		#explanation {
+			width:300px;
+			float:right;
+			margin-right:80px;
+		}
+		
+		.code {
+			font-family:Courier, monospace;
+		}
+		
 		#sandbox {
 			margin:20px;
 			border:1px solid #ccc;
@@ -48,8 +59,8 @@
 	<body>
 		<div id="page">
 			<h1>Fitts' Law Sandbox</h1>
-			<p>
-				The formula is <code>Movement Time = a + b(log<sub>2</sub>(widthOfTarget/distanceToTarget) + 1)</code>.
+			<p id="explanation">
+				The formula is <span class="code">Movement Time = a + b(log<sub>2</sub>(widthOfTarget/distanceToTarget) + 1)</span>.
 			</p>
 			<div id="sandbox">
 				<button type="button" id="target">Target</button>
