@@ -2,65 +2,9 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Fitts' Law Sandbox</title>
-	<link href="normalize.css" rel="stylesheet">
-	<style>
-		#page {
-			padding:0 10px;
-		}
-		
-		#explanation {
-			border:1px solid #ccc;
-			padding:20px;
-		}
-		
-		.code {
-			font-family:Courier, monospace;
-		}
-		
-		#sandbox {
-			margin:20px 0;
-			border:1px solid #ccc;
-			width:100%;
-			height:600px;
-			position:relative;
-		}
-		#target {
-			position:absolute;
-			left:50%;
-			top:50%;
-		}
-		
-		#slider-container {
-			position:absolute;
-			top:20px;
-			left:20px;
-		}
-		
-		#slider-rail {
-			margin-top:10px;
-			width:200px;
-			border:1px solid #111;
-			background-color:#333;
-			height:10px;
-		}
-		
-		#slider {
-			width:10px;
-			height:30px;
-			margin-top:-10px;
-			border:1px solid #000;
-			background-color:#eee;
-			cursor:pointer;
-		}
-		
-		#movement-time {
-			width:200px;
-			position:absolute;
-			right:20px;
-			top:20px;
-		}
-	</style>
+	<title>Fitts's Law Sandbox</title>
+	<link href="css/normalize.css" rel="stylesheet">
+	<link href="css/fitts.css" rel="stylesheet">
 </head>
 	<body>
 		<div id="page">
@@ -83,41 +27,7 @@
 			</div>
 		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-		<script>
-			//"back of the envelope" calculations in milliseconds (Raskin, 2000)
-			var a = 50;
-			var b = 150;
-			var target = document.getElementById('target');
-			var sandbox = document.getElementById('sandbox');
-			var result = document.getElementById('result');
-			
-			//sandbox: offsetLeft is 30, offsetTop is 80
-			
-			function calculateMovementTime(e){
-				var targetWidth = target.clientWidth;
-				//compensate for #sandbox offset
-				//TODO: calculate from appropriate corner, rather than always top left, depending on where mouse is
-				var targetX = target.offsetLeft - sandbox.offsetLeft;
-				var targetY = target.offsetTop - sandbox.offsetTop;
-				var mouseX = e.pageX - sandbox.offsetLeft;
-				var mouseY = e.pageY - sandbox.offsetTop;
-				
-				//use e.offsetX and e.offsetY to get mouse relative to #sandbox
-				var distanceFromMouseToTarget = getDistance(targetX, targetY, mouseX, mouseY);
-				
-				console.log(distanceFromMouseToTarget);
-				
-				
-				var movementTime = (a + b * ( (Math.log(distanceFromMouseToTarget/targetWidth + 1) / Math.log(2) )));
-				//console.log(movementTime);
-				result.innerHTML = movementTime;
-			}
-		
-			function getDistance(x1, y1, x2, y2){
-				return Math.sqrt( Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) );
-			}
-			
-			sandbox.addEventListener('mousemove', calculateMovementTime, true);				
-		</script>
+		<script src="js/raphael-min.js"></script>
+		<script src="js/fitts.js"></script>
 	</body>
 </htmL>
