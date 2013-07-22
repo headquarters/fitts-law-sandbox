@@ -10,9 +10,8 @@
 		}
 		
 		#explanation {
-			width:300px;
-			float:right;
-			margin-right:80px;
+			border:1px solid #ccc;
+			padding:20px;
 		}
 		
 		.code {
@@ -20,9 +19,9 @@
 		}
 		
 		#sandbox {
-			margin:20px;
+			margin:20px 0;
 			border:1px solid #ccc;
-			width:800px;
+			width:100%;
 			height:600px;
 			position:relative;
 		}
@@ -65,9 +64,9 @@
 </head>
 	<body>
 		<div id="page">
-			<h1>Fitts' Law Sandbox</h1>
+			<h1>Fitts's Law Sandbox</h1>
 			<p id="explanation">
-				The formula is <span class="code">Movement Time = a + b(log<sub>2</sub>(widthOfTarget/distanceToTarget) + 1)</span>.
+				The formula is <span class="code">Movement Time = a + b(log<sub>2</sub>(distance/width) + 1)</span>.
 			</p>
 			<div id="sandbox">
 				<button type="button" id="target">Target</button>
@@ -76,57 +75,49 @@
 					Movement Time: <span id="result">0</span>ms
 				</div>
 				<div id="slider-container">
-					Adjust the size of the target: 
+					Size of the target: 
 					<div id="slider-rail">
 						<div id="slider"></div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 		<script>
-			(function(){ 
+			//"back of the envelope" calculations in milliseconds (Raskin, 2000)
+			var a = 50;
+			var b = 150;
+			var target = document.getElementById('target');
+			var sandbox = document.getElementById('sandbox');
+			var result = document.getElementById('result');
 			
-				//"back of the envelope" calculations in milliseconds (Raskin, 2000)
-				var a = 50;
-				var b = 150;
-				var target = document.getElementById('target');
-				var sandbox = document.getElementById('sandbox');
-				var result = document.getElementById('result');
-				
-				//sandbox: offsetLeft is 30, offsetTop is 80
-				
-				function calculateMovementTime(e){
-					var targetWidth = target.clientWidth;
-					//compensate for #sandbox offset
-					//TODO: calculate from appropriate corner, rather than always top left, depending on where mouse is
-					var targetX = target.offsetLeft - sandbox.offsetLeft;
-					var targetY = target.offsetTop - sandbox.offsetTop;
-					var mouseX = e.pageX - sandbox.offsetLeft;
-					var mouseY = e.pageY - sandbox.offsetTop;
-					
-					//use e.offsetX and e.offsetY to get mouse relative to #sandbox
-					var distanceFromMouseToTarget = getDistance(targetX, targetY, mouseX, mouseY);
-					
-					//console.log(Math.log(targetWidth/distanceFromMouseToTarget), Math.log(2));
-					
-					console.log(e);
-					//console.log(targetX, targetY, e.offsetX, e.offsetY);
-					//console.log(distanceFromMouseToTarget, targetWidth);
-					
-					var movementTime = (a + b * ( (Math.log(distanceFromMouseToTarget/targetWidth + 1) / Math.log(2) )));
-					//console.log(movementTime);
-					result.innerHTML = movementTime;
-				}
+			//sandbox: offsetLeft is 30, offsetTop is 80
 			
-				function getDistance(x1, y1, x2, y2){
-					return Math.sqrt( Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) );
-				}
+			function calculateMovementTime(e){
+				var targetWidth = target.clientWidth;
+				//compensate for #sandbox offset
+				//TODO: calculate from appropriate corner, rather than always top left, depending on where mouse is
+				var targetX = target.offsetLeft - sandbox.offsetLeft;
+				var targetY = target.offsetTop - sandbox.offsetTop;
+				var mouseX = e.pageX - sandbox.offsetLeft;
+				var mouseY = e.pageY - sandbox.offsetTop;
 				
-				sandbox.addEventListener('mousemove', calculateMovementTime, true);
+				//use e.offsetX and e.offsetY to get mouse relative to #sandbox
+				var distanceFromMouseToTarget = getDistance(targetX, targetY, mouseX, mouseY);
+				
+				console.log(distanceFromMouseToTarget);
 				
 				
-				//console.log(sandbox);
-			})();
+				var movementTime = (a + b * ( (Math.log(distanceFromMouseToTarget/targetWidth + 1) / Math.log(2) )));
+				//console.log(movementTime);
+				result.innerHTML = movementTime;
+			}
+		
+			function getDistance(x1, y1, x2, y2){
+				return Math.sqrt( Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) );
+			}
+			
+			sandbox.addEventListener('mousemove', calculateMovementTime, true);				
 		</script>
 	</body>
 </htmL>
