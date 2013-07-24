@@ -17,16 +17,48 @@ var Fitts = function(){
 
 var Sandbox = function(){
 	var self = {};
-	var target = document.getElementById('target');
-	var sandbox = document.getElementById('sandbox');
-	var result = document.getElementById('result');
+	var target = null;
+	var targetText = null;
+	var sandbox = Raphael("sandbox", 800, 600);
+	var lineToTarget = null;
+	//var result = document.getElementById('result');
 	
 	self.init = function(){
-		sandbox.addEventListener('mousemove', self.calculateMovementTime, true);	
+		//sandbox.addEventListener('mousemove', self.calculateMovementTime, true);
+		target = sandbox.rect(360, 275, 80, 50, 5);
+		target.attr({
+			fill: "#fff"
+		});
+		
+		sandbox.text(400, 300, "Target").attr({
+			font: "16px Arial",
+			fill: "#999"
+		});
+		
+		$('#sandbox').on('mousemove', self.cursorMoves);
+	};
+	
+	self.cursorMoves = function(e){
+		var x = e.offsetX;
+		var y = e.offsetY;
+		
+		if (lineToTarget == null) {
+			lineToTarget = sandbox.path("M" + x + " " + y + "L400 300");
+		} else {
+			lineToTarget.attr("path", "M" + x + " " + y + "L400 300");
+		}
+		
+		console.log(self.getDistance(400, 300, x, y));
+		
+	};
+	
+	
+	self.getDistance = function(x1, y1, x2, y2){
+		return Math.sqrt( Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) );
 	};
 	
 	//sandbox: offsetLeft is 30, offsetTop is 80
-	self.calculateMovementTime = function(e){
+	/*self.calculateMovementTime = function(e){
 		var targetWidth = target.clientWidth;
 		//compensate for #sandbox offset
 		//TODO: calculate from appropriate corner, rather than always top left, depending on where mouse is
@@ -45,10 +77,7 @@ var Sandbox = function(){
 		result.innerHTML = movementTime;
 	};
 
-	self.getDistance = function(x1, y1, x2, y2){
-		return Math.sqrt( Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) );
-	};
-	
+	*/
 	return self;
 }();
 

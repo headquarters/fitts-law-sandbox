@@ -12,11 +12,12 @@
 }
 
 #sandbox {
-	margin:20px 0;
+	margin:20px auto;
 	border:1px solid #ccc;
-	width:100%;
+	width:800px;
 	height:600px;
 	position:relative;
+	background:#eee;
 }
 #target {
 	position:absolute;
