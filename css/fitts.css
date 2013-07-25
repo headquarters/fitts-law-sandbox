@@ -47,10 +47,3 @@
 	background-color:#eee;
 	cursor:pointer;
 }
-
-#movement-time {
-	width:200px;
-	position:absolute;
-	right:20px;
-	top:20px;
-}

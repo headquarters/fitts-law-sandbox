@@ -17,20 +17,26 @@ var Fitts = function(){
 
 var Sandbox = function(){
 	var self = {};
+	var width = 800;
+	var height = 600;
+	var midpointX = width / 2;
+	var midpointY = height / 2;
+	var targetWidth = 80;
+	var targetHeight = 50;
 	var target = null;
 	var targetText = null;
-	var sandbox = Raphael("sandbox", 800, 600);
+	var sandbox = Raphael("sandbox", width, height);
 	var lineToTarget = null;
+	var distanceText = null;
 	//var result = document.getElementById('result');
 	
 	self.init = function(){
-		//sandbox.addEventListener('mousemove', self.calculateMovementTime, true);
-		target = sandbox.rect(360, 275, 80, 50, 5);
+		target = sandbox.rect(midpointX - (targetWidth / 2), midpointY - (targetHeight / 2), targetWidth, targetHeight, 5);
 		target.attr({
 			fill: "#fff"
 		});
 		
-		sandbox.text(400, 300, "Target").attr({
+		sandbox.text(midpointX, midpointY, "Target").attr({
 			font: "16px Arial",
 			fill: "#999"
 		});
@@ -43,12 +49,22 @@ var Sandbox = function(){
 		var y = e.offsetY;
 		
 		if (lineToTarget == null) {
-			lineToTarget = sandbox.path("M" + x + " " + y + "L400 300");
+			lineToTarget = sandbox.path("M" + x + " " + y + "L" + midpointX + " " + midpointY);
 		} else {
-			lineToTarget.attr("path", "M" + x + " " + y + "L400 300");
+			lineToTarget.attr("path", "M" + x + " " + y + "L"+ midpointX + " " + midpointY);
 		}
 		
-		console.log(self.getDistance(400, 300, x, y));
+		var distance = self.getDistance(midpointX, midpointY, x, y);
+		
+		if (distanceText == null) {
+			distanceText = sandbox.text(midpointX + (distance/2), midpointY + (distance/2), distance.toFixed(2)).attr({
+				font: "12px Arial",
+				fill: "#666"
+			});
+		} else {
+			console.log(distanceText);
+			distanceText.attr({ x: midpointX + (distance/2), y: midpointY + (distance/2), text: distance.toFixed(2)});
+		}
 		
 	};
 	
