@@ -28,7 +28,9 @@ var Sandbox = function(){
 	var sandbox = Raphael("sandbox", width, height);
 	var lineToTarget = null;
 	var distanceText = null;
-	//var result = document.getElementById('result');
+	var $distance = $('#distance');
+	var $width = $('#width');
+	var $movementTime = $('#movement-time');
 	
 	self.init = function(){
 		target = sandbox.rect(midpointX - (targetWidth / 2), midpointY - (targetHeight / 2), targetWidth, targetHeight, 5);
@@ -41,7 +43,11 @@ var Sandbox = function(){
 			fill: "#999"
 		});
 		
+		$width.text(targetWidth);
+		
 		$('#sandbox').on('mousemove', self.cursorMoves);
+		
+		
 	};
 	
 	self.cursorMoves = function(e){
@@ -62,16 +68,27 @@ var Sandbox = function(){
 				fill: "#666"
 			});
 		} else {
-			console.log(distanceText);
-			distanceText.attr({ x: midpointX + (distance/2), y: midpointY + (distance/2), text: distance.toFixed(2)});
+			var textMidpoint = self.getMidpoint(x, midpointX, y, midpointY);
+			//var textX = (x < midpointX) ? midpointX - x : x - midpointX;
+			//var textY = (y < midpointY) ? midpointY - y : y - midpointY;
+			distanceText.attr({ x: textMidpoint.x, y: textMidpoint.y, text: distance.toFixed(2)});
 		}
 		
+		$distance.text(distance.toFixed(2));
+		
+		var mt = Fitts.getMovementTime(distance, targetWidth);
+		
+		$movementTime.text(mt.toFixed(2));
 	};
 	
 	
 	self.getDistance = function(x1, y1, x2, y2){
 		return Math.sqrt( Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) );
 	};
+	
+	self.getMidpoint = function(x1, x2, y1, y2){
+		return { x: ((x1 + x2) / 2), y: ((y1 + y2) / 2) };
+	}
 	
 	//sandbox: offsetLeft is 30, offsetTop is 80
 	/*self.calculateMovementTime = function(e){
