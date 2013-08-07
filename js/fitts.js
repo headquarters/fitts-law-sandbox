@@ -28,9 +28,14 @@ var Sandbox = function(){
 	var sandbox = Raphael("sandbox", width, height);
 	var lineToTarget = null;
 	var distanceText = null;
+	var distance = null;
+	var previousDistance = null;
+	var startTime = null;
+	var endTime = null;
 	var $distance = $('#distance');
 	var $width = $('#width');
 	var $movementTime = $('#movement-time');
+	var $actualMovementTime = $('#actual-movement-time');
 	
 	self.init = function(){
 		target = sandbox.rect(midpointX - (targetWidth / 2), midpointY - (targetHeight / 2), targetWidth, targetHeight, 5);
@@ -47,6 +52,7 @@ var Sandbox = function(){
 		
 		$('#sandbox').on('mousemove', self.cursorMoves);
 		
+		$(target.node).on('mouseenter', self.enterTarget).on('mouseleave', self.leaveTarget);
 		
 	};
 	
@@ -60,7 +66,27 @@ var Sandbox = function(){
 			lineToTarget.attr("path", "M" + x + " " + y + "L"+ midpointX + " " + midpointY);
 		}
 		
-		var distance = self.getDistance(midpointX, midpointY, x, y);
+		distance = self.getDistance(midpointX, midpointY, x, y);
+				
+		if(distance >= previousDistance) {
+			console.log('decreasing');
+			//distance is increasing, user is moving away from target
+			startTime = (new Date).getTime();	
+		} else {
+			//distance is decreasing, user is moving toward the target
+			//clearInterval(intervalID);
+			
+			if (startTime == null) {
+				console.log('update start time');
+				startTime = (new Date).getTime();	
+				
+			} else {
+				console.log('update end time, start time: ', startTime);
+				endTime = (new Date).getTime();
+			}
+			
+			
+		}
 		
 		if (distanceText == null) {
 			distanceText = sandbox.text(midpointX + (distance/2), midpointY + (distance/2), distance.toFixed(2)).attr({
@@ -69,8 +95,7 @@ var Sandbox = function(){
 			});
 		} else {
 			var textMidpoint = self.getMidpoint(x, midpointX, y, midpointY);
-			//var textX = (x < midpointX) ? midpointX - x : x - midpointX;
-			//var textY = (y < midpointY) ? midpointY - y : y - midpointY;
+
 			distanceText.attr({ x: textMidpoint.x, y: textMidpoint.y, text: distance.toFixed(2)});
 		}
 		
@@ -79,8 +104,30 @@ var Sandbox = function(){
 		var mt = Fitts.getMovementTime(distance, targetWidth);
 		
 		$movementTime.text(mt.toFixed(2));
+		
+		//stash distance for next cursorMove
+		previousDistance = distance;
 	};
 	
+	self.enterTarget = function(){
+		//clearInterval(intervalID);
+		$('#sandbox').off('mousemove');
+		
+		lineToTarget.remove();
+		distanceText.remove();
+		
+		lineToTarget = null;
+		distanceText = null;
+		
+		$actualMovementTime.text(endTime - startTime);
+	}
+	
+	self.leaveTarget = function(){
+		$('#sandbox').on('mousemove', self.cursorMoves);
+		
+		startTime = null;
+		endTime = null;
+	}
 	
 	self.getDistance = function(x1, y1, x2, y2){
 		return Math.sqrt( Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) );
@@ -90,27 +137,6 @@ var Sandbox = function(){
 		return { x: ((x1 + x2) / 2), y: ((y1 + y2) / 2) };
 	}
 	
-	//sandbox: offsetLeft is 30, offsetTop is 80
-	/*self.calculateMovementTime = function(e){
-		var targetWidth = target.clientWidth;
-		//compensate for #sandbox offset
-		//TODO: calculate from appropriate corner, rather than always top left, depending on where mouse is
-		var targetX = target.offsetLeft - sandbox.offsetLeft;
-		var targetY = target.offsetTop - sandbox.offsetTop;
-		var mouseX = e.pageX - sandbox.offsetLeft;
-		var mouseY = e.pageY - sandbox.offsetTop;
-		
-		//use e.offsetX and e.offsetY to get mouse relative to #sandbox
-		var distanceFromMouseToTarget = self.getDistance(targetX, targetY, mouseX, mouseY);
-		
-		console.log(distanceFromMouseToTarget);
-		
-		var movementTime = Fitts.getMovementTime(distanceFromMouseToTarget, targetWidth);
-		//console.log(movementTime);
-		result.innerHTML = movementTime;
-	};
-
-	*/
 	return self;
 }();
 
