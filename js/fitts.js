@@ -28,8 +28,8 @@ var Sandbox = function(){
 	var sandbox = Raphael("sandbox", width, height);
 	var lineToTarget = null;
 	var distanceText = null;
-	var distance = null;
-	var previousDistance = null;
+	var distance = 0;
+	var previousDistance = 0;
 	var startTime = null;
 	var endTime = null;
 	var $distance = $('#distance');
@@ -68,25 +68,22 @@ var Sandbox = function(){
 		
 		distance = self.getDistance(midpointX, midpointY, x, y);
 				
-		if(distance >= previousDistance) {
-			console.log('decreasing');
+		
+		console.log(distance, previousDistance);
+		
+		if(previousDistance > 0 && distance >= previousDistance) {
+			console.log("moving away from target");
 			//distance is increasing, user is moving away from target
-			startTime = (new Date).getTime();	
-		} else {
-			//distance is decreasing, user is moving toward the target
-			//clearInterval(intervalID);
-			
-			if (startTime == null) {
-				console.log('update start time');
-				startTime = (new Date).getTime();	
-				
-			} else {
-				console.log('update end time, start time: ', startTime);
-				endTime = (new Date).getTime();
-			}
-			
-			
+			startTime = null;
+			endTime = null;
 		}
+		
+		if (startTime == null && distance < previousDistance) {
+			console.log("starting the clock");
+			//distance is decreasing, user is moving toward the target
+			startTime = (new Date).getTime();	
+		}
+		
 		
 		if (distanceText == null) {
 			distanceText = sandbox.text(midpointX + (distance/2), midpointY + (distance/2), distance.toFixed(2)).attr({
@@ -119,6 +116,9 @@ var Sandbox = function(){
 		lineToTarget = null;
 		distanceText = null;
 		
+		endTime = (new Date).getTime();	
+		
+		console.log("endTime: ", endTime, " startTime: ", startTime);
 		$actualMovementTime.text(endTime - startTime);
 	}
 	
