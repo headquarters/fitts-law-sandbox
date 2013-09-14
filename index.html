@@ -5,6 +5,7 @@
 	<title>Fitts's Law Sandbox</title>
 	<link href="css/normalize.css" rel="stylesheet">
 	<link href="css/fitts.css" rel="stylesheet">
+	<link href="css/ui-lightness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet">
 </head>
 	<body>
 		<div id="page">
@@ -14,9 +15,18 @@
 				<span class="code"><span id="movement-time">MT</span>ms = 50 + 150(log<sub>2</sub>(<span id="distance">d</span>/<span id="width">w</span>) + 1)</span> <br />
 				Actual movement time: <span id="actual-movement-time">0</span>ms
 			</p>
+			<div id="slider-container">
+				<h4>Target Size</h4>
+				Small
+				<div id="slider-rail">
+					<div id="slider"></div>
+				</div>
+				Large
+			</div>
 			<div id="sandbox"></div>
 		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
 		<script src="js/raphael-min.js"></script>
 		<script src="js/fitts.js"></script>
 	</body>

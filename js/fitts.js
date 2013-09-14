@@ -36,6 +36,37 @@ var Sandbox = function(){
 	var $width = $('#width');
 	var $movementTime = $('#movement-time');
 	var $actualMovementTime = $('#actual-movement-time');
+	var $slider = $('#slider').slider({
+		min: 0,
+		max: 5,
+		step: 1
+	});
+	var sizes = [
+		{
+			width: targetWidth,
+			height: targetHeight
+		},
+		{
+			width: 100,
+			height: 60
+		},
+		{
+			width: 120,
+			height: 70
+		},
+		{
+			width: 140,
+			height: 80
+		},
+		{
+			width: 160,
+			height: 90
+		},
+		{
+			width: 180,
+			height: 100
+		}
+	]
 	
 	self.init = function(){
 		target = sandbox.rect(midpointX - (targetWidth / 2), midpointY - (targetHeight / 2), targetWidth, targetHeight, 5);
@@ -54,6 +85,7 @@ var Sandbox = function(){
 		
 		$(target.node).on('mouseenter', self.enterTarget).on('mouseleave', self.leaveTarget);
 		
+		$slider.on('slidestop', self.slidestop);
 	};
 	
 	self.cursorMoves = function(e){
@@ -61,7 +93,9 @@ var Sandbox = function(){
 		var y = e.offsetY;
 		
 		if (lineToTarget == null) {
-			lineToTarget = sandbox.path("M" + x + " " + y + "L" + midpointX + " " + midpointY);
+			lineToTarget = sandbox.path("M" + x + " " + y + "L" + midpointX + " " + midpointY).attr({
+				opacity:0.3	
+			});
 		} else {
 			lineToTarget.attr("path", "M" + x + " " + y + "L"+ midpointX + " " + midpointY);
 		}
@@ -86,25 +120,35 @@ var Sandbox = function(){
 		
 		
 		if (distanceText == null) {
-			distanceText = sandbox.text(midpointX + (distance/2), midpointY + (distance/2), distance.toFixed(2)).attr({
+			distanceText = sandbox.text(midpointX + (distance/2), midpointY + (distance/2) + 50, distance.toFixed(2)).attr({
 				font: "12px Arial",
 				fill: "#666"
 			});
 		} else {
 			var textMidpoint = self.getMidpoint(x, midpointX, y, midpointY);
 
-			distanceText.attr({ x: textMidpoint.x, y: textMidpoint.y, text: distance.toFixed(2)});
+			distanceText.attr({ x: textMidpoint.x, y: textMidpoint.y - 10, text: distance.toFixed(2)});
 		}
 		
 		$distance.text(distance.toFixed(2));
 		
-		var mt = Fitts.getMovementTime(distance, targetWidth);
+		var mt = Fitts.getMovementTime(distance, target.attr('width'));
 		
 		$movementTime.text(mt.toFixed(2));
 		
 		//stash distance for next cursorMove
 		previousDistance = distance;
 	};
+	
+	self.slidestop = function(event, ui){
+		
+		var newWidth = sizes[ui.value].width;
+		var newHeight = sizes[ui.value].height;
+		
+		target.attr({ width: newWidth, height: newHeight });
+		
+		console.log(newWidth, newHeight);
+	}
 	
 	self.enterTarget = function(){
 		//clearInterval(intervalID);

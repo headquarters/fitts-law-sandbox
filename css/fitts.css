@@ -26,19 +26,16 @@
 }
 
 #slider-container {
-	position:absolute;
-	top:20px;
-	left:20px;
+	width:800px;
+	margin:0 auto;
 }
 
 #slider-rail {
-	margin-top:10px;
+	margin:10px 10px 0;
 	width:200px;
-	border:1px solid #111;
-	background-color:#333;
-	height:10px;
+	display:inline-block;
 }
-
+/*
 #slider {
 	width:10px;
 	height:30px;
@@ -47,3 +44,4 @@
 	background-color:#eee;
 	cursor:pointer;
 }
+*/
