@@ -120,16 +120,17 @@ var Sandbox = function(){
 		
 		
 		if (distanceText == null) {
-			distanceText = sandbox.text(midpointX + (distance/2), midpointY + (distance/2) + 50, distance.toFixed(2)).attr({
+			distanceText = sandbox.text(midpointX + (distance/2), midpointY + (distance/2) + 50, distance.toFixed(2) + "px").attr({
 				font: "12px Arial",
 				fill: "#666"
 			});
 		} else {
 			var textMidpoint = self.getMidpoint(x, midpointX, y, midpointY);
 
-			distanceText.attr({ x: textMidpoint.x, y: textMidpoint.y - 10, text: distance.toFixed(2)});
+			distanceText.attr({ x: textMidpoint.x, y: textMidpoint.y - 10, text: distance.toFixed(2) + "px"});
 		}
 		
+		//write distance on top of the line
 		$distance.text(distance.toFixed(2));
 		
 		var mt = Fitts.getMovementTime(distance, target.attr('width'));
