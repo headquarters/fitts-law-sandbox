@@ -69,7 +69,7 @@ var Sandbox = function(){
 	]
 	
 	self.init = function(){
-		target = sandbox.rect(midpointX - (targetWidth / 2), midpointY - (targetHeight / 2), targetWidth, targetHeight, 5);
+		target = sandbox.rect(midpointX - (targetWidth / 2), midpointY - (targetHeight / 2), targetWidth, targetHeight, 0);
 		target.attr({
 			fill: "#fff"
 		});
@@ -101,19 +101,16 @@ var Sandbox = function(){
 		}
 		
 		distance = self.getDistance(midpointX, midpointY, x, y);
-				
-		
-		console.log(distance, previousDistance);
+	
+//console.log(distance, previousDistance);
 		
 		if(previousDistance > 0 && distance >= previousDistance) {
-			console.log("moving away from target");
 			//distance is increasing, user is moving away from target
 			startTime = null;
 			endTime = null;
 		}
 		
 		if (startTime == null && distance < previousDistance) {
-			console.log("starting the clock");
 			//distance is decreasing, user is moving toward the target
 			startTime = (new Date).getTime();	
 		}
@@ -146,9 +143,12 @@ var Sandbox = function(){
 		var newWidth = sizes[ui.value].width;
 		var newHeight = sizes[ui.value].height;
 		
-		target.attr({ width: newWidth, height: newHeight });
+		var newX = midpointX - (newWidth / 2)
+		var newY = midpointY - (newHeight / 2)
 		
-		console.log(newWidth, newHeight);
+		target.attr({ x: newX, y: newY, width: newWidth, height: newHeight });
+		
+		$width.text(newWidth);
 	}
 	
 	self.enterTarget = function(){
@@ -163,7 +163,7 @@ var Sandbox = function(){
 		
 		endTime = (new Date).getTime();	
 		
-		console.log("endTime: ", endTime, " startTime: ", startTime);
+//console.log("endTime: ", endTime, " startTime: ", startTime);
 		$actualMovementTime.text(endTime - startTime);
 	}
 	
